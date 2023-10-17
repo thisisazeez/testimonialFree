@@ -8,13 +8,13 @@ from django.views.generic import DetailView, RedirectView, UpdateView
 User = get_user_model()
 
 
-class UserDetailView(LoginRequiredMixin, DetailView):
-    model = User
-    slug_field = "id"
-    slug_url_kwarg = "id"
+# class UserDetailView(LoginRequiredMixin, DetailView):
+#     model = User
+#     slug_field = "uuid"
+#     slug_url_kwarg = "uuid"
 
 
-user_detail_view = UserDetailView.as_view()
+# user_detail_view = UserDetailView.as_view()
 
 
 class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
@@ -37,7 +37,7 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False
 
     def get_redirect_url(self):
-        return reverse("users:detail", kwargs={"pk": self.request.user.pk})
+        return reverse("users:detail", kwargs={"uuid": self.request.user.uuid})
 
 
 user_redirect_view = UserRedirectView.as_view()

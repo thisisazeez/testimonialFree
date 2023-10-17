@@ -1,10 +1,17 @@
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField, EmailField
+from django.db.models import CharField, EmailField, UUIDField, ImageField, OneToOneField
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-
+from django.utils.text import slugify
 from testimonialfree.users.managers import UserManager
+import uuid
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
+from django.db import models
+from PIL import Image
 
+
+fs = FileSystemStorage(location='/media/photos')
 
 class User(AbstractUser):
     """
@@ -24,12 +31,22 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+    
 
-    def get_absolute_url(self) -> str:
-        """Get URL for user's detail view.
 
-        Returns:
-            str: URL for user detail.
-
-        """
-        return reverse("users:detail", kwargs={"pk": self.id})
+class UserProfile(models.Model):
+    profile_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='profile',
+        primary_key=True
+    )
+    cover_image = models.ImageField(_("Cover Image"), upload_to='cover_images/', storage=fs, null=True, blank=True)
+    avatar = models.ImageField(_("Profile Image"), upload_to='profile_images/', storage=fs, null=True, blank=True)
+    
+    def get_absolute_url(self):
+        return reverse('profile_detail_view', kwargs={'profile_uuid': self.profile_uuid})
+    
+    def __str__(self):
+        return f'{self.user.email} Profile'

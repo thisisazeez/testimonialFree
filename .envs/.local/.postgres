@@ -3,5 +3,7 @@
 POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
 POSTGRES_DB=testimonialfree
-POSTGRES_USER=debug
-POSTGRES_PASSWORD=debug
+POSTGRES_USER=testimonialfreeuser
+POSTGRES_PASSWORD=passworD
+
+DATABASE_URL=postgresql://localhost/testimonialfree?user=testimonialfreeuser&password=passworD
