@@ -3,6 +3,8 @@ from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from django.contrib.auth import forms as admin_forms
 from django.contrib.auth import get_user_model
 from django.forms import EmailField
+from django import forms
+from  .models import UserProfile
 from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
@@ -43,3 +45,21 @@ class UserSocialSignupForm(SocialSignupForm):
     Default fields will be added automatically.
     See UserSignupForm otherwise.
     """
+
+
+class UpdateUserForm(forms.ModelForm):
+    email = forms.EmailField(required=True,
+                             widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = User
+        fields = [ 'email']
+
+
+class UpdateProfileForm(forms.ModelForm):
+    avatar = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control-file'}))
+    cover_image = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control-file', 'rows': 5}))
+
+    class Meta:
+        model = UserProfile
+        fields = ['avatar', 'cover_image']

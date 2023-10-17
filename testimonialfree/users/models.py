@@ -11,7 +11,7 @@ from django.db import models
 from PIL import Image
 
 
-fs = FileSystemStorage(location='/media/photos')
+# fs = FileSystemStorage(location='/media/photos')
 
 class User(AbstractUser):
     """
@@ -42,11 +42,11 @@ class UserProfile(models.Model):
         related_name='profile',
         primary_key=True
     )
-    cover_image = models.ImageField(_("Cover Image"), upload_to='cover_images/', storage=fs, null=True, blank=True)
-    avatar = models.ImageField(_("Profile Image"), upload_to='profile_images/', storage=fs, null=True, blank=True)
+    cover_image = models.ImageField(_("Cover Image"), upload_to='cover_images/', null=True, blank=True)
+    avatar = models.ImageField(_("Profile Image"), upload_to='profile_images/',  null=True, blank=True)
     
     def get_absolute_url(self):
-        return reverse('profile_detail_view', kwargs={'profile_uuid': self.profile_uuid})
+        return reverse('users-profile', kwargs={'uuid': self.profile_uuid})
     
     def __str__(self):
         return f'{self.user.email} Profile'
