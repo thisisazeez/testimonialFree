@@ -21,7 +21,8 @@ A testimonial website help potential customers learn more about a business or pr
 
 At a very high level this website will have following elements.
 
-1/ Create an account, log in, forget password  
+1/ Create an account, log in, forget password(done)
+
 2/ Submit testimonials, edit, delete  
 3/ List testimonials   
 4/ Create embed code to display testimonials on other websites. 
