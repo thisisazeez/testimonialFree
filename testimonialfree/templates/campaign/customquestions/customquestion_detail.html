@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Custom Question Detail</h2>
+  <p><strong>Text:</strong> {{ question.text }}</p>
+  <p><strong>Type:</strong> {{ question.type }}</p>
+  <a href="{% url 'testimonial:customquestion_update' question.slug %}">Edit</a>
+  <a href="{% url 'testimonial:customquestion_delete' question.slug %}">Delete</a>
+{% endblock %}

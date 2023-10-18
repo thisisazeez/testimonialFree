@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Extra Information Detail</h2>
+  <p><strong>Text:</strong> {{ extrainfo.text }}</p>
+  <p><strong>Required:</strong> {{ extrainfo.required }}</p>
+  <p><strong>Type:</strong> {{ extrainfo.type }}</p>
+  <a href="{% url 'testimonial:extrainfo_update' extrainfo.slug %}">Edit</a>
+  <a href="{% url 'testimonial:extrainfo_delete' extrainfo.slug %}">Delete</a>
+{% endblock %}

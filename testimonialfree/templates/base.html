@@ -91,6 +91,12 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'testimonial:create_testimonial_campaign' %}">{% translate "Create Campaign" %}</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'testimonial:customquestion_list' %}">{% translate "List Questions" %}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'testimonial:extrainfo_list' %}">{% translate "List ExtraFields" %}</a>
+              </li>
             {% else %}
               {% if ACCOUNT_ALLOW_REGISTRATION %}
                 <li class="nav-item">

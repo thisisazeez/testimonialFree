@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Extra Information List</h2>
+  <ul>
+    {% for extrainfo in extrainfos %}
+      <li><a href="{% url 'testimonial:extrainfo_detail' extrainfo.slug %}">{{ extrainfo.text }}</a></li>
+    {% empty %}
+      <p>No extra information records found.</p>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'testimonial:extrainfo_create' %}">Create New Extra Info</a>
+{% endblock %}

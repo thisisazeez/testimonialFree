@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Custom Questions List</h2>
+  <ul>
+    {% for question in questions %}
+      <li><a href="{% url 'testimonial:customquestion_detail' question.slug %}">{{ question.text }}</a></li>
+    {% empty %}
+      <p>No custom questions found.</p>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'testimonial:customquestion_create' %}">Create New Custom Question</a>
+{% endblock %}

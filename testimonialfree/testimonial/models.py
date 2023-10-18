@@ -1,25 +1,56 @@
 from django.db import models
 from django.conf import settings
-# Create your models here.
+from django.urls import reverse
+from django.utils.text import slugify
+
 EXTRAINFO_CHOICES = (
     ("TEXT", "TEXT"),
     ("CHECKBOX", "CHECKBOX"),
 )
 
+
 class CustomQuestion(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        blank=True, null=True
+    )
     text = models.CharField(max_length=255, blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     type = models.CharField(max_length=20, blank=True, null=True)
 
     def __str__(self):
         return self.text
+
+    def get_absolute_url(self):
+        return reverse('testimonial:customquestion_list', args=[str(self.slug)])
     
+    def save(self, *args, **kwargs):
+        value = self.text
+        self.slug = slugify(value, allow_unicode=True)
+        super().save(*args, **kwargs)
+
 class ExtraInfo(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        blank=True, null=True
+    )
     text = models.CharField(max_length=255, blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     required = models.BooleanField(default=False)
     type = models.CharField(max_length=20, default="TEXT", choices=EXTRAINFO_CHOICES)
 
     def __str__(self):
         return self.text
+
+    def get_absolute_url(self):
+        return reverse('testimonial:extrainfo_detail', args=[str(self.slug)])
+    
+    def save(self, *args, **kwargs):
+        value = self.text
+        self.slug = slugify(value, allow_unicode=True)
+        super().save(*args, **kwargs)
 
 class TestimonialCampaign(models.Model):
     user = models.ForeignKey(
@@ -39,6 +70,11 @@ class TestimonialCampaign(models.Model):
     
     def __str__(self):
        return '{} {}'.format(self.name, self.user.email)
+   
+    def save(self, *args, **kwargs):
+        value = self.name
+        self.slug = slugify(value, allow_unicode=True)
+        super().save(*args, **kwargs)
 
 
 class Testimonial(models.Model):
@@ -46,9 +82,14 @@ class Testimonial(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     submission_date = models.DateTimeField(auto_now_add=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     responses = models.JSONField()  # Store responses as JSON
     
     def __str__(self):
         return f"Testimonial for {self.campaign.name} by {self.name}"
     
+    def save(self, *args, **kwargs):
+        value = self.title
+        self.slug = slugify(value, allow_unicode=True)
+        super().save(*args, **kwargs)
 
