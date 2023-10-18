@@ -6,7 +6,7 @@ EXTRAINFO_CHOICES = (
     ("CHECKBOX", "CHECKBOX"),
 )
 
-class Question(models.Model):
+class CustomQuestion(models.Model):
     text = models.CharField(max_length=255, blank=True, null=True)
     type = models.CharField(max_length=20, blank=True, null=True)
 
@@ -16,7 +16,7 @@ class Question(models.Model):
 class ExtraInfo(models.Model):
     text = models.CharField(max_length=255, blank=True, null=True)
     required = models.BooleanField(default=False)
-    type = models.CharField(max_length=20, blank=True, null=True, default="TEXT", choices=EXTRAINFO_CHOICES)
+    type = models.CharField(max_length=20, default="TEXT", choices=EXTRAINFO_CHOICES)
 
     def __str__(self):
         return self.text
@@ -30,8 +30,11 @@ class TestimonialCampaign(models.Model):
     slug = models.SlugField(unique=True, blank=True, null=True)
     logo = models.ImageField(upload_to='testimonial_logos/', blank=True, null=True)
     header_title = models.CharField(max_length=200, blank=True, null=True)
+    q1 = models.CharField(max_length=100, verbose_name="Question One", blank=True, null=True)
+    q2 = models.CharField(max_length=100, verbose_name="Question Two", blank=True, null=True)
+    q3 = models.CharField(max_length=100, verbose_name="Question Three", blank=True, null=True)
     custom_message = models.TextField(blank=True, null=True)
-    questions = models.ManyToManyField(Question, blank=True)
+    custom_questions = models.ManyToManyField(CustomQuestion, blank=True)
     extra_info = models.ManyToManyField(ExtraInfo, blank=True)
     
     def __str__(self):
