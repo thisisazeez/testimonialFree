@@ -21,8 +21,10 @@ def extrainfo_create(request):
     if request.method == 'POST':
         form = ExtraInfoForm(request.POST)
         if form.is_valid():
-            extrainfo = form.save()
-            return redirect(extrainfo)
+            extrainfo = form.save(commit=False)
+            extrainfo.user = request.user
+            extrainfo.save()
+            return redirect('testimonial:extrainfo_list')
     else:
         form = ExtraInfoForm()
     return render(request, 'campaign/extrainfos/extrainfo_form.html', {'form': form})
@@ -32,8 +34,10 @@ def extrainfo_update(request, slug):
     if request.method == 'POST':
         form = ExtraInfoForm(request.POST, instance=extrainfo)
         if form.is_valid():
-            form.save()
-            return redirect(extrainfo)
+            extrainfo = form.save(commit=False)
+            extrainfo.user = request.user
+            extrainfo.save()
+            return redirect('testimonial:extrainfo_list')
     else:
         form = ExtraInfoForm(instance=extrainfo)
     return render(request, 'campaign/extrainfos/extrainfo_form.html', {'form': form})
@@ -42,7 +46,7 @@ def extrainfo_delete(request, slug):
     extrainfo = get_object_or_404(ExtraInfo, slug=slug)
     if request.method == 'POST':
         extrainfo.delete()
-        return redirect('extrainfo_list')
+        return redirect('testimonial:extrainfo_list')
     return render(request, 'campaign/extrainfos/extrainfo_confirm_delete.html', {'extrainfo': extrainfo})
 
 
@@ -58,7 +62,9 @@ def customquestion_create(request):
     if request.method == 'POST':
         form = CustomQuestionForm(request.POST)
         if form.is_valid():
-            question = form.save()
+            question = form.save(commit=False)
+            question.user = request.user
+            question.save()
             return redirect('testimonial:customquestion_list')
     else:
         form = CustomQuestionForm()
@@ -69,8 +75,10 @@ def customquestion_update(request, slug):
     if request.method == 'POST':
         form = CustomQuestionForm(request.POST, instance=question)
         if form.is_valid():
-            form.save()
-            return redirect(question)
+            question = form.save(commit=False)
+            question.user = request.user
+            question.save()
+            return redirect('testimonial:customquestion_list')
     else:
         form = CustomQuestionForm(instance=question)
     return render(request, 'campaign/customquestions/customquestion_form.html', {'form': form})
@@ -79,7 +87,7 @@ def customquestion_delete(request, slug):
     question = get_object_or_404(CustomQuestion, slug=slug)
     if request.method == 'POST':
         question.delete()
-        return redirect('customquestion_list')
+        return redirect('testimonial:customquestion_list')
     return render(request, 'campaign/customquestions/customquestion_confirm_delete.html', {'question': question})
 
 
@@ -91,7 +99,7 @@ def create_testimonial_campaign(request):
             campaign = form.save(commit=False)
             campaign.user = request.user
             campaign.save()
-            return redirect('view_testimonial_campaign', campaign.slug)  # Use the slug for redirection
+            return redirect('testimonial:view_testimonial_campaign', campaign.slug)  # Use the slug for redirection
     else:
         form = TestimonialCampaignForm()
     
@@ -104,7 +112,7 @@ def list_testimonial_campaigns(request):
 @login_required
 def view_testimonial_campaign(request, campaign_slug):
     campaign = get_object_or_404(TestimonialCampaign, slug=campaign_slug)
-    return render(request, 'view_testimonial_campaign.html', {'campaign': campaign})
+    return render(request, 'testimonial:view_testimonial_campaign.html', {'campaign': campaign})
 
 @login_required
 def edit_testimonial_campaign(request, campaign_slug):
@@ -114,7 +122,7 @@ def edit_testimonial_campaign(request, campaign_slug):
         form = TestimonialCampaignForm(request.POST, request.FILES, instance=campaign)
         if form.is_valid():
             campaign = form.save()
-            return redirect('view_testimonial_campaign', campaign.slug)  # Use the slug for redirection
+            return redirect('testimonial:view_testimonial_campaign', campaign.slug)  # Use the slug for redirection
     else:
         form = TestimonialCampaignForm(instance=campaign)
     
@@ -127,7 +135,7 @@ def delete_testimonial_campaign(request, campaign_slug):
     if request.method == 'POST':
         if campaign.user == request.user:
             campaign.delete()
-            return redirect('list_testimonial_campaigns')  
+            return redirect('testimonial:list_testimonial_campaigns')  
     return render(request, 'campaign/delete_testimonial_campaign.html', {'campaign': campaign})
 
 
