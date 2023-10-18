@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    <h1 class="mt-4">List of Testimonial Campaigns</h1>
+    <ul>
+      {% for campaign in campaigns %}
+        <li>
+          <a href="{% url 'testimonial:view_testimonial_campaign' campaign.slug %}">{{ campaign.name }}</a>
+          <a href="{% url 'testimonial:edit_testimonial_campaign' campaign.slug %}">Edit</a>
+          <a href="{% url 'testimonial:delete_testimonial_campaign' campaign.slug %}">Delete</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

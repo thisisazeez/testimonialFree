@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    <h1 class="mt-4">Delete Testimonial Campaign</h1>
+    <p>Are you sure you want to delete the campaign "{{ campaign.name }}"?</p>
+    <form method="post" class="mt-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Yes, Delete</button>
+      <a href="{% url 'testimonial:view_testimonial_campaign' campaign.slug %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+{% endblock %}

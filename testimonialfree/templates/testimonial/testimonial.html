@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    <h1 class="mt-4">Submit Testimonial for "{{ campaign.name }}"</h1>
+    <form method="post">
+      {% csrf_token %}
+      
+      <div class="mb-3">
+        <label for="name" class="form-label">Name (optional):</label>
+        <input type="text" name="name" id="name" class="form-control">
+      </div>
+      
+      <div class="mb-3">
+        <label for="email" class="form-label">Email (optional):</label>
+        <input type="email" name="email" id="email" class="form-control">
+      </div>
+      
+      {% for question in campaign.questions %}
+        <div class="mb-3">
+          <label for="question_{{ question }}" class="form-label">{{ question }}:</label>
+          <textarea name="question_{{ question }}" id="question_{{ question }}" class="form-control" rows="4" required></textarea>
+        </div>
+      {% endfor %}
+      
+      <button type="submit" class="btn btn-primary">Submit Testimonial</button>
+    </form>
+  </div>
+{% endblock %}

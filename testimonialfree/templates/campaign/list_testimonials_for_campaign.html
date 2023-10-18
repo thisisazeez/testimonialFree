@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    <h1 class="mt-4">Testimonials for "{{ campaign.name }}"</h1>
+    <ul>
+      {% for testimonial in testimonials %}
+        <li>
+          <h3>{{ testimonial.name }}</h3>
+          <p>{{ testimonial.submission_date }}</p>
+          <p>{{ testimonial.email }}</p>
+          <p>{{ testimonial.responses }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
