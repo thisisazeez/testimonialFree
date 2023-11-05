@@ -99,7 +99,7 @@ def create_testimonial_campaign(request):
             campaign = form.save(commit=False)
             campaign.user = request.user
             campaign.save()
-            return redirect('testimonial:view_testimonial_campaign', campaign.slug)  # Use the slug for redirection
+            return redirect('testimonial:list_testimonial_campaigns')
     else:
         form = TestimonialCampaignForm()
     
@@ -112,7 +112,7 @@ def list_testimonial_campaigns(request):
 @login_required
 def view_testimonial_campaign(request, campaign_slug):
     campaign = get_object_or_404(TestimonialCampaign, slug=campaign_slug)
-    return render(request, 'testimonial:view_testimonial_campaign.html', {'campaign': campaign})
+    return render(request, 'campaign/view_testimonial_campaign.html', {'campaign': campaign})
 
 @login_required
 def edit_testimonial_campaign(request, campaign_slug):
@@ -146,13 +146,13 @@ def list_testimonials_for_campaign(request, campaign_slug):
 
 @require_http_methods(['GET', 'POST'])
 def submit_testimonial(request, campaign_slug):
-    campaign = get_object_or_404(TestimonialCampaign, slug=campaign_slug)
+    campaign = TestimonialCampaign.objects.get(slug=campaign_slug)
     
     if request.method == 'POST':
-        responses = {}
-        for question in campaign.questions:
-            response_key = f'question_{question}'
-            responses[response_key] = request.POST.get(response_key, '')
+        # responses = {}
+        # for question in campaign:
+        #     response_key = f'question_{question}'
+        #     responses[response_key] = request.POST.get(response_key, '')
         
         name = request.POST.get('name', '')  # Optional for unauthenticated users
         email = request.POST.get('email', '')  # Optional for unauthenticated users
@@ -165,4 +165,4 @@ def submit_testimonial(request, campaign_slug):
         )
         testimonial.save()
         # Redirect or render a success page
-    return render(request, 'testimonial/testimonial.html', {'campaign': campaign})
+    return render(request, 'testimonial/submit_testimonial.html', {'campaign': campaign})

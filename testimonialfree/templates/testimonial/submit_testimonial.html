@@ -15,12 +15,12 @@
         <input type="email" name="email" id="email" class="form-control">
       </div>
       
-      {% for question in campaign.questions %}
+      {% comment %} {% for question in campaign %} {% endcomment %}
         <div class="mb-3">
-          <label for="question_{{ question }}" class="form-label">{{ question }}:</label>
+          <label for="question_{{ question }}" class="form-label">{{ question.extra_info }}:</label>
           <textarea name="question_{{ question }}" id="question_{{ question }}" class="form-control" rows="4" required></textarea>
         </div>
-      {% endfor %}
+      {% comment %} {% endfor %} {% endcomment %}
       
       <button type="submit" class="btn btn-primary">Submit Testimonial</button>
     </form>
