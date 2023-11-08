@@ -6,89 +6,6 @@ from django.contrib.auth.decorators import login_required
 from .models import TestimonialCampaign
 from .forms import TestimonialCampaignForm 
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import CustomQuestion, ExtraInfo
-from .forms import CustomQuestionForm, ExtraInfoForm
-
-def extrainfo_list(request):
-    extrainfos = ExtraInfo.objects.all()
-    return render(request, 'campaign/extrainfos/extrainfo_list.html', {'extrainfos': extrainfos})
-
-def extrainfo_detail(request, slug):
-    extrainfo = get_object_or_404(ExtraInfo, slug=slug)
-    return render(request, 'campaign/extrainfos/extrainfo_detail.html', {'extrainfo': extrainfo})
-
-def extrainfo_create(request):
-    if request.method == 'POST':
-        form = ExtraInfoForm(request.POST)
-        if form.is_valid():
-            extrainfo = form.save(commit=False)
-            extrainfo.user = request.user
-            extrainfo.save()
-            return redirect('testimonial:extrainfo_list')
-    else:
-        form = ExtraInfoForm()
-    return render(request, 'campaign/extrainfos/extrainfo_form.html', {'form': form})
-
-def extrainfo_update(request, slug):
-    extrainfo = get_object_or_404(ExtraInfo, slug=slug)
-    if request.method == 'POST':
-        form = ExtraInfoForm(request.POST, instance=extrainfo)
-        if form.is_valid():
-            extrainfo = form.save(commit=False)
-            extrainfo.user = request.user
-            extrainfo.save()
-            return redirect('testimonial:extrainfo_list')
-    else:
-        form = ExtraInfoForm(instance=extrainfo)
-    return render(request, 'campaign/extrainfos/extrainfo_form.html', {'form': form})
-
-def extrainfo_delete(request, slug):
-    extrainfo = get_object_or_404(ExtraInfo, slug=slug)
-    if request.method == 'POST':
-        extrainfo.delete()
-        return redirect('testimonial:extrainfo_list')
-    return render(request, 'campaign/extrainfos/extrainfo_confirm_delete.html', {'extrainfo': extrainfo})
-
-
-def customquestion_list(request):
-    questions = CustomQuestion.objects.all()
-    return render(request, 'campaign/customquestions/customquestion_list.html', {'questions': questions})
- 
-def customquestion_detail(request, slug):
-    question = get_object_or_404(CustomQuestion, slug=slug)
-    return render(request, 'campaign/customquestions/customquestion_detail.html', {'question': question})
-
-def customquestion_create(request):
-    if request.method == 'POST':
-        form = CustomQuestionForm(request.POST)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.user = request.user
-            question.save()
-            return redirect('testimonial:customquestion_list')
-    else:
-        form = CustomQuestionForm()
-    return render(request, 'campaign/customquestions/customquestion_form.html', {'form': form})
-
-def customquestion_update(request, slug):
-    question = get_object_or_404(CustomQuestion, slug=slug)
-    if request.method == 'POST':
-        form = CustomQuestionForm(request.POST, instance=question)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.user = request.user
-            question.save()
-            return redirect('testimonial:customquestion_list')
-    else:
-        form = CustomQuestionForm(instance=question)
-    return render(request, 'campaign/customquestions/customquestion_form.html', {'form': form})
-
-def customquestion_delete(request, slug):
-    question = get_object_or_404(CustomQuestion, slug=slug)
-    if request.method == 'POST':
-        question.delete()
-        return redirect('testimonial:customquestion_list')
-    return render(request, 'campaign/customquestions/customquestion_confirm_delete.html', {'question': question})
 
 
 @login_required
@@ -139,11 +56,6 @@ def delete_testimonial_campaign(request, campaign_slug):
     return render(request, 'campaign/delete_testimonial_campaign.html', {'campaign': campaign})
 
 
-def list_testimonials_for_campaign(request, campaign_slug):
-    campaign = get_object_or_404(TestimonialCampaign, slug=campaign_slug)
-    testimonials = Testimonial.objects.filter(campaign=campaign)
-    return render(request, 'campaign/list_testimonials_for_campaign.html', {'campaign': campaign, 'testimonials': testimonials})
-
 @require_http_methods(['GET', 'POST'])
 def submit_testimonial(request, campaign_slug):
     campaign = TestimonialCampaign.objects.get(slug=campaign_slug)
@@ -157,11 +69,10 @@ def submit_testimonial(request, campaign_slug):
         name = request.POST.get('name', '')  # Optional for unauthenticated users
         email = request.POST.get('email', '')  # Optional for unauthenticated users
         
-        testimonial = Testimonial(
+        testimonial = TestimonialCampaign(
             campaign=campaign,
             name=name,
             email=email,
-            responses=responses,
         )
         testimonial.save()
         # Redirect or render a success page
