@@ -16,10 +16,13 @@ class TestimonialCampaign(models.Model):
     q2 = models.CharField(max_length=100, verbose_name="Question Two", blank=True, null=True)
     q3 = models.CharField(max_length=100, verbose_name="Question Three", blank=True, null=True)
     
-    user_name = models.CharField(max_length=100, blank=True, null=True)
-    user_email = models.EmailField(blank=True, null=True)
-    user_avatar = models.ImageField(_("Applicant Image"), upload_to='user_images/',  null=True, blank=True)
+    applicant_name = models.CharField(max_length=100, blank=True, null=True)
+    applicant_email = models.EmailField(blank=True, null=True)
+    applicant_title = models.CharField(max_length=255, blank=True, null=True)
+    applicant_company = models.CharField(max_length=255, blank=True, null=True)
+    applicant_avatar = models.ImageField(_("Applicant Image"), upload_to='user_images/',  null=True, blank=True)
     submission_date = models.DateTimeField(auto_now_add=True)
+    collect_applicant_details = models.BooleanField(default=True, blank=True, null=True)
     
     custom_message = models.TextField(blank=True, null=True)
     
